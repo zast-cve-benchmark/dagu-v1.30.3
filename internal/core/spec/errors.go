@@ -1,0 +1,33 @@
+package spec
+
+import "errors"
+
+var (
+	ErrInvalidSchedule                     = errors.New("invalid schedule")
+	ErrScheduleMustBeStringOrArray         = errors.New("schedule must be a string or an array of strings")
+	ErrInvalidScheduleType                 = errors.New("invalid schedule type")
+	ErrDotEnvMustBeStringOrArray           = errors.New("dotenv must be a string or an array of strings")
+	ErrPreconditionValueMustBeString       = errors.New("precondition value must be a string")
+	ErrPreconditionNegateMustBeBool        = errors.New("precondition negate must be a boolean")
+	ErrPreconditionHasInvalidKey           = errors.New("precondition has invalid key")
+	ErrPreconditionMustBeArrayOrString     = errors.New("precondition must be a string or an array of strings")
+	ErrInvalidStepData                     = errors.New("invalid step data")
+	ErrStepsMustBeArrayOrMap               = errors.New("steps must be an array or a map")
+	ErrContinueOnExitCodeMustBeIntOrArray  = errors.New("continueOn.exitCode must be an int or an array of ints")
+	ErrContinueOnOutputMustBeStringOrArray = errors.New("continueOn.output must be a string or an array of strings")
+	ErrContinueOnMustBeStringOrMap         = errors.New("continueOn must be a string ('skipped' or 'failed') or an object")
+	ErrContinueOnInvalidStringValue        = errors.New("continueOn string value must be 'skipped' or 'failed'")
+	ErrContinueOnFieldMustBeBool           = errors.New("value must be a boolean")
+	ErrInvalidSignal                       = errors.New("invalid signal")
+	ErrDependsMustBeStringOrArray          = errors.New("depends must be a string or an array of strings")
+	ErrExecutorTypeMustBeString            = errors.New("executor.type value must be string")
+	ErrExecutorConfigValueMustBeMap        = errors.New("executor.config value must be a map")
+	ErrExecutorHasInvalidKey               = errors.New("executor has invalid key")
+	ErrExecutorConfigMustBeStringOrMap     = errors.New("executor config must be string or map")
+	ErrInvalidEnvValue                     = errors.New("env config should be map of strings or array of key=value formatted string")
+	ErrInvalidParamValue                   = errors.New("invalid parameter value")
+	ErrStepCommandIsEmpty                  = errors.New("step command is empty")
+	ErrStepCommandMustBeArrayOrString      = errors.New("step command must be an array of strings or a string")
+	ErrTimeoutSecMustBeNonNegative         = errors.New("timeoutSec must be >= 0")
+	ErrExecutorDoesNotSupportMultipleCmd   = errors.New("executor does not support multiple commands")
+)

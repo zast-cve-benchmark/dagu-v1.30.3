@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en" translate="no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/assets/favicon.ico" />
+    <title>Dagu</title>
+    <script>
+      function getConfig() {
+        return {
+          apiURL: 'http://localhost:8080/api/v2',
+          basePath: '',
+          title: 'Test Environment',
+          navbarColor: '',
+          version: 'dev',
+          tz: '',
+          tzOffsetInSec: undefined,
+          maxDashboardPageLimit: '',
+          remoteNodes: 'local,dev,dev1',
+          permissions: {
+            writeDags: true,
+            runDags: true,
+          },
+          paths: {
+            configFileUsed: '~/.config/dagu/config.yaml',
+            baseConfig: '~/.config/dagu/base.yaml',
+            dagsDir: '~/.config/dagu/dags',
+            logDir: '~/.local/share/dagu/logs',
+            suspendFlagsDir: '~/.local/share/dagu/suspend',
+            adminLogsDir: '~/.local/share/dagu/logs/admin',
+            dagRunsDir: '~/.local/share/dagu/data/dag-runs',
+            queueDir: '~/.local/share/dagu/data/queue',
+            procDir: '~/.local/share/dagu/data/proc',
+            serviceRegistryDir: '~/.local/share/dagu/data/services',
+            usersDir: '~/.local/share/dagu/data/users',
+          },
+          authMode: 'builtin',
+        };
+      }
+    </script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+  </body>
+</html>
