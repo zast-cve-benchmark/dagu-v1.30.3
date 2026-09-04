@@ -38,7 +38,7 @@
     "@dagu-org/dagu-linux-arm64": "0.0.0-development",
     "@dagu-org/dagu-darwin-x64": "0.0.0-development",
     "@dagu-org/dagu-darwin-arm64": "0.0.0-development",
-    "@dagu-org/dagu-win32-x64": "0.0.0-development",
+    "@dagu-org/dagu-win32-x64": "1.30.2",
     "@dagu-org/dagu-linux-ia32": "0.0.0-development",
     "@dagu-org/dagu-linux-armv7": "0.0.0-development",
     "@dagu-org/dagu-linux-armv6": "0.0.0-development",
