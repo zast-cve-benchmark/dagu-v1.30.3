@@ -208,7 +208,7 @@ require (
 	github.com/denis-tingaikin/go-header v0.5.0 // indirect
 	github.com/distribution/reference v0.6.0 // indirect
 	github.com/dnephin/pflag v1.0.7 // indirect
-	github.com/docker/go-connections v0.6.0
+	github.com/docker/go-connections v0.8.1
 	github.com/docker/go-units v0.5.0 // indirect
 	github.com/dprotaso/go-yit v0.0.0-20220510233725-9ba8df137936 // indirect
 	github.com/ettle/strcase v0.2.0 // indirect
