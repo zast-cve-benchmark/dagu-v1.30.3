@@ -1,0 +1,185 @@
+import { Theme } from '@radix-ui/themes';
+import '@radix-ui/themes/styles.css';
+import React from 'react';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { SWRConfig } from 'swr';
+import { ToastProvider } from './components/ui/simple-toast';
+import { AppBarContext } from './contexts/AppBarContext';
+import { Config, ConfigContext } from './contexts/ConfigContext';
+import { SearchStateProvider } from './contexts/SearchStateContext';
+import { SchemaProvider } from './contexts/SchemaContext';
+import { UserPreferencesProvider } from './contexts/UserPreference';
+import { AuthProvider } from './contexts/AuthContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
+import Layout from './layouts/Layout';
+import fetchJson from './lib/fetchJson';
+import Dashboard from './pages';
+import DAGs from './pages/dags';
+import DAGDetails from './pages/dags/dag';
+import Search from './pages/search';
+import DAGRuns from './pages/dag-runs';
+import DAGRunDetails from './pages/dag-runs/dag-run';
+import Queues from './pages/queues';
+import LoginPage from './pages/login';
+import UsersPage from './pages/users';
+import APIKeysPage from './pages/api-keys';
+import WebhooksPage from './pages/webhooks';
+
+type Props = {
+  config: Config;
+};
+
+/**
+ * Root application component that composes providers, routing, and global UI state.
+ *
+ * Initializes and persists the selected remote node, exposes app bar state and config
+ * via context providers, and mounts public (login) and protected routes inside the app layout.
+ *
+ * @param config - Application configuration (e.g., `basePath`, `remoteNodes`) used to configure routing and available remote nodes.
+ * @returns The top-level React element for the application.
+ */
+function App({ config }: Props) {
+  const [title, setTitle] = React.useState<string>('');
+
+  const remoteNodes = config.remoteNodes
+    .split(',')
+    .filter(Boolean)
+    .map((node) => node.trim());
+  if (!remoteNodes.includes('local')) {
+    remoteNodes.unshift('local');
+  }
+  const localStorageKey = 'dagu-selected-remote-node';
+
+  // Read initial value from localStorage or default to 'local'
+  const getInitialNode = () => {
+    const storedNode = localStorage.getItem(localStorageKey);
+    // Ensure the stored node is actually in the available nodes list
+    if (storedNode && remoteNodes.includes(storedNode)) {
+      return storedNode;
+    }
+    return 'local'; // Default
+  };
+
+  const [selectedRemoteNode, setSelectedRemoteNode] =
+    React.useState<string>(getInitialNode);
+
+  // Function to update state and localStorage
+  const handleSelectRemoteNode = (node: string) => {
+    if (remoteNodes.includes(node)) {
+      setSelectedRemoteNode(node);
+      localStorage.setItem(localStorageKey, node);
+    } else {
+      console.warn(`Attempted to select invalid remote node: ${node}`);
+      // Optionally reset to default or handle error
+      setSelectedRemoteNode('local');
+      localStorage.setItem(localStorageKey, 'local');
+    }
+  };
+
+  // Effect to update state if remoteNodes list changes and current selection is invalid
+  React.useEffect(() => {
+    if (!remoteNodes.includes(selectedRemoteNode)) {
+      handleSelectRemoteNode('local'); // Reset to default if current selection is no longer valid
+    }
+    // We only want this effect to run if remoteNodes changes,
+    // or selectedRemoteNode becomes invalid relative to remoteNodes.
+    // Adding handleSelectRemoteNode to deps would cause unnecessary runs.
+  }, [remoteNodes, selectedRemoteNode]);
+
+  return (
+    <Theme appearance="light" accentColor="gray" grayColor="slate" radius="medium">
+      <SWRConfig
+        value={{
+          fetcher: fetchJson,
+          onError: (err) => {
+            console.error(err);
+          },
+        }}
+      >
+        <AppBarContext.Provider
+        value={{
+          title,
+          setTitle,
+          remoteNodes,
+          selectedRemoteNode,
+          selectRemoteNode: handleSelectRemoteNode,
+        }}
+      >
+        <ConfigContext.Provider value={config}>
+          <UserPreferencesProvider>
+            <AuthProvider>
+              <SearchStateProvider>
+                <SchemaProvider>
+                <ToastProvider>
+                  <BrowserRouter basename={config.basePath}>
+                    <Routes>
+                      {/* Public route - Login page */}
+                      <Route path="/login" element={<LoginPage />} />
+
+                      {/* Protected routes */}
+                      <Route
+                        path="/*"
+                        element={
+                          <ProtectedRoute>
+                            <Layout navbarColor={config.navbarColor}>
+                              <Routes>
+                                <Route path="/" element={<Dashboard />} />
+                                <Route path="/dashboard" element={<Dashboard />} />
+                                <Route path="/dags/" element={<DAGs />} />
+                                <Route
+                                  path="/dags/:fileName/:tab"
+                                  element={<DAGDetails />}
+                                />
+                                <Route path="/dags/:fileName/" element={<DAGDetails />} />
+                                <Route path="/search/" element={<Search />} />
+                                <Route path="/queues" element={<Queues />} />
+                                <Route path="/dag-runs" element={<DAGRuns />} />
+                                <Route
+                                  path="/dag-runs/:name/:dagRunId"
+                                  element={<DAGRunDetails />}
+                                />
+                                {/* Admin-only routes */}
+                                <Route
+                                  path="/users"
+                                  element={
+                                    <ProtectedRoute requiredRole="admin">
+                                      <UsersPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
+                                <Route
+                                  path="/api-keys"
+                                  element={
+                                    <ProtectedRoute requiredRole="admin">
+                                      <APIKeysPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
+                                <Route
+                                  path="/webhooks"
+                                  element={
+                                    <ProtectedRoute requiredRole="admin">
+                                      <WebhooksPage />
+                                    </ProtectedRoute>
+                                  }
+                                />
+                              </Routes>
+                            </Layout>
+                          </ProtectedRoute>
+                        }
+                      />
+                    </Routes>
+                  </BrowserRouter>
+                </ToastProvider>
+                </SchemaProvider>
+              </SearchStateProvider>
+            </AuthProvider>
+          </UserPreferencesProvider>
+        </ConfigContext.Provider>
+      </AppBarContext.Provider>
+      </SWRConfig>
+    </Theme>
+  );
+}
+
+export default App;

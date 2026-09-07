@@ -1,0 +1,104 @@
+# goreleaser.yaml
+version: 2
+
+before:
+  hooks:
+    - go mod tidy
+
+builds:
+  - id: dagu
+    dir: ./cmd
+    binary: dagu
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - freebsd
+      - openbsd
+      - windows
+    goarch:
+      - "amd64"
+      - "386"
+      - "arm"
+      - "arm64"
+      - "ppc64le"
+      - "s390x"
+    goarm:
+      - "6"
+      - "7"
+
+release:
+  mode: keep-existing
+
+checksum:
+  name_template: "checksums.txt"
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+
+brews:
+  - repository:
+      owner: dagu-org
+      name: homebrew-brew
+    directory: Formula
+    homepage: "https://github.com/dagu-org/dagu"
+    description: "A compact, portable, and language-agnostic workflow engine"
+    license: "GNU General Public License v3.0"
+    custom_block: |
+      service do
+        run [opt_bin/"dagu", "start-all"]
+        keep_alive true
+        error_log_path var/"log/dagu.log"
+        log_path var/"log/dagu.log"
+        working_dir var
+      end
+
+  # Deprecated brew tap:
+  - repository:
+      owner: yohamta
+      name: homebrew-tap
+    directory: Formula
+    homepage: "https://github.com/dagu-org/dagu"
+    description: "A compact, portable, and language-agnostic workflow engine"
+    license: "GNU General Public License v3.0"
+    custom_block: |
+      service do
+        run [opt_bin/"dagu", "start-all"]
+        keep_alive true
+        error_log_path var/"log/dagu.log"
+        log_path var/"log/dagu.log"
+        working_dir var
+      end
+
+snapcrafts:
+  - name: dagu
+    title: Dagu
+    summary: "A compact, portable, and language-agnostic workflow engine"
+    description: |
+      Dagu is a compact, portable workflow engine implemented in Go. It provides a declarative model for orchestrating command execution across diverse environments, including shell scripts, Python commands, containerized operations, or remote commands.
+    confinement: strict
+    grade: stable
+    base: core24
+    license: "GPL-3.0"
+    builds:
+      - dagu
+    layout:
+      /usr/bin/dagu:
+        bind: $SNAP/dagu
+    apps:
+      dagu:
+        command: dagu start-all
+        daemon: simple
+        plugs:
+          - network
+          - home
+          - personal-files
+        restart_condition: "always"

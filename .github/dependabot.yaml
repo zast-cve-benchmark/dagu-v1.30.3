@@ -1,0 +1,29 @@
+version: 2
+updates:
+  - package-ecosystem: devcontainers
+    directory: /
+    schedule:
+      interval: quarterly
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: quarterly
+  - package-ecosystem: docker-compose
+    directory: /
+    schedule:
+      interval: quarterly
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: quarterly
+  - package-ecosystem: gomod
+    directory: /
+    schedule:
+      interval: quarterly
+  - package-ecosystem: npm
+    directories:
+      - docs
+      - npm/*
+      - ui
+    schedule:
+      interval: quarterly
