@@ -25,7 +25,7 @@ require (
 	github.com/google/addlicense v1.1.1
 	github.com/google/jsonschema-go v0.3.0
 	github.com/google/uuid v1.6.0
-	github.com/itchyny/gojq v0.12.18
+	github.com/itchyny/gojq v0.12.19
 	github.com/jedib0t/go-pretty/v6 v6.6.8
 	github.com/joho/godotenv v1.5.1
 	github.com/mholt/archives v0.1.5
@@ -255,7 +255,7 @@ require (
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
 	github.com/hexops/gotextdiff v1.0.3 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
-	github.com/itchyny/timefmt-go v0.1.7 // indirect
+	github.com/itchyny/timefmt-go v0.1.8 // indirect
 	github.com/jgautheron/goconst v1.8.2 // indirect
 	github.com/jingyugao/rowserrcheck v1.1.1 // indirect
 	github.com/jjti/go-spancheck v0.6.5 // indirect
