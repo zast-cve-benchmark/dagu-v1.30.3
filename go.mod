@@ -5,7 +5,7 @@ go 1.25
 require (
 	dario.cat/mergo v1.0.2
 	github.com/adrg/xdg v0.5.3
-	github.com/bmatcuk/doublestar/v4 v4.8.0
+	github.com/bmatcuk/doublestar/v4 v4.10.2
 	github.com/charmbracelet/bubbles v0.21.0
 	github.com/charmbracelet/bubbletea v1.3.6
 	github.com/containerd/errdefs v1.0.0
